@@ -1,0 +1,116 @@
+{
+  "units": [
+    {
+      "id": 1,
+      "stage": "A1 Beginner",
+      "title": "People and ser",
+      "theme": "Pronouns, family and people",
+      "ready": true,
+      "grammar": {
+        "title": "Subject pronouns and the verb ser",
+        "body": "Spanish usually drops the subject pronoun, because the verb ending already shows who is acting. \"Soy estudiante\" means \"I am a student.\" Add the pronoun only for emphasis or contrast.\n\nSer means \"to be\" for identity, origin and profession. It is irregular, so learn the forms as a set:\n\nyo soy\ntú eres\nél / ella / usted es\nnosotros somos\nustedes son\nellos / ellas son\n\nUsted is the formal \"you\" and takes the same form as él and ella. Ustedes is the plural \"you\" throughout Latin America; vosotros is mostly a Spain form and is skipped here.\n\nDo not use an article before a profession: \"Soy médico,\" not \"Soy un médico.\" To negate, put no before the verb: \"No soy profesor.\"\n\nNouns for people often change -o to -a for a woman: hermano, hermana; amigo, amiga; médico, médica. Profesor adds -a: profesora. Estudiante stays the same for both.",
+        "examples": [
+          {"es": "Yo soy estudiante.", "en": "I am a student."},
+          {"es": "¿Tú eres médico?", "en": "Are you a doctor?"},
+          {"es": "Ella es mi madre.", "en": "She is my mother."},
+          {"es": "Nosotros somos amigos.", "en": "We are friends."},
+          {"es": "Ellos no son hermanos.", "en": "They are not brothers."},
+          {"es": "Hola, me llamo Marta. Mucho gusto.", "en": "Hello, my name is Marta. Nice to meet you."},
+          {"es": "¿De dónde eres? Soy de México.", "en": "Where are you from? I am from Mexico."}
+        ]
+      },
+      "vocab": [
+        {"es": "yo", "en": "I", "ex": "Yo soy estudiante.", "exEn": "I am a student."},
+        {"es": "tú", "en": "you (informal)", "ex": "Tú eres mi amigo.", "exEn": "You are my friend."},
+        {"es": "él", "en": "he", "ex": "Él es mi padre.", "exEn": "He is my father."},
+        {"es": "ella", "en": "she", "ex": "Ella es mi madre.", "exEn": "She is my mother."},
+        {"es": "nosotros", "en": "we", "ex": "Nosotros somos amigos.", "exEn": "We are friends."},
+        {"es": "ustedes", "en": "you (plural)", "ex": "Ustedes son estudiantes.", "exEn": "You are students."},
+        {"es": "ellos", "en": "they", "ex": "Ellos son mis hermanos.", "exEn": "They are my brothers."},
+        {"es": "la madre", "en": "mother", "ex": "Mi madre es profesora.", "exEn": "My mother is a teacher."},
+        {"es": "el padre", "en": "father", "ex": "Mi padre es médico.", "exEn": "My father is a doctor."},
+        {"es": "el hijo", "en": "son", "ex": "Él es mi hijo.", "exEn": "He is my son."},
+        {"es": "la hija", "en": "daughter", "ex": "Ella es mi hija.", "exEn": "She is my daughter."},
+        {"es": "el hermano", "en": "brother", "ex": "Mi hermano es pequeño.", "exEn": "My brother is small."},
+        {"es": "la hermana", "en": "sister", "ex": "Mi hermana es estudiante.", "exEn": "My sister is a student."},
+        {"es": "la familia", "en": "family", "ex": "Mi familia es grande.", "exEn": "My family is big."},
+        {"es": "el amigo", "en": "friend (male)", "ex": "Diego es mi amigo.", "exEn": "Diego is my friend."},
+        {"es": "la amiga", "en": "friend (female)", "ex": "Marta es mi amiga.", "exEn": "Marta is my friend."},
+        {"es": "el hombre", "en": "man", "ex": "Él es un hombre.", "exEn": "He is a man."},
+        {"es": "la mujer", "en": "woman", "ex": "Ella es una mujer.", "exEn": "She is a woman."},
+        {"es": "el niño", "en": "boy", "ex": "El niño es pequeño.", "exEn": "The boy is small."},
+        {"es": "la niña", "en": "girl", "ex": "La niña es mi hermana.", "exEn": "The girl is my sister."},
+        {"es": "el bebé", "en": "baby", "ex": "El bebé es mi hijo.", "exEn": "The baby is my son."},
+        {"es": "la persona", "en": "person", "ex": "Ella es una persona amable.", "exEn": "She is a kind person."},
+        {"es": "el profesor", "en": "teacher (male)", "ex": "El profesor es de Chile.", "exEn": "The teacher is from Chile."},
+        {"es": "el estudiante", "en": "student", "ex": "Yo soy estudiante.", "exEn": "I am a student."},
+        {"es": "el médico", "en": "doctor (male)", "ex": "Mi padre es médico.", "exEn": "My father is a doctor."}
+      ],
+      "reading": {
+        "title": "Marta y su familia",
+        "paragraphs": [
+          "Hola, me llamo Marta. Soy estudiante y soy de México. Mi familia es pequeña: mi madre, mi padre y mi hermano.",
+          "Mi madre es profesora. Mi padre es médico. Mi hermano se llama Pablo. Él es un niño.",
+          "Diego es mi amigo. Él no es de México; es de Colombia. Diego y yo somos estudiantes. Nosotros somos amigos."
+        ],
+        "gloss": {
+          "hola": "hello",
+          "me": "myself (me llamo = my name is)",
+          "llamo": "I call (me llamo = my name is)",
+          "soy": "I am",
+          "estudiante": "student",
+          "estudiantes": "students",
+          "y": "and",
+          "de": "from / of",
+          "méxico": "Mexico",
+          "mi": "my",
+          "familia": "family",
+          "es": "is",
+          "pequeña": "small (feminine)",
+          "madre": "mother",
+          "padre": "father",
+          "hermano": "brother",
+          "profesora": "teacher (female)",
+          "médico": "doctor",
+          "se": "himself (se llama = is called)",
+          "llama": "calls (se llama = is called)",
+          "él": "he",
+          "un": "a / one",
+          "niño": "boy",
+          "no": "no / not",
+          "colombia": "Colombia",
+          "somos": "we are",
+          "yo": "I",
+          "nosotros": "we",
+          "amigo": "friend",
+          "amigos": "friends",
+          "marta": "Marta (name)",
+          "pablo": "Pablo (name)",
+          "diego": "Diego (name)"
+        }
+      },
+      "questions": [
+        {"q": "What is the student who tells the story called?", "options": ["Marta", "Pablo", "Diego"], "answer": 0, "explain": "\"Me llamo Marta\" in the first line: she introduces herself."},
+        {"q": "Who is the doctor?", "options": ["Marta's mother", "Marta's father", "Diego"], "answer": 1, "explain": "\"Mi padre es médico.\""},
+        {"q": "Where is Diego from?", "options": ["México", "Chile", "Colombia"], "answer": 2, "explain": "\"Él no es de México; es de Colombia.\""},
+        {"q": "Who is Pablo?", "options": ["Marta's brother", "Marta's friend", "Marta's son"], "answer": 0, "explain": "\"Mi hermano se llama Pablo.\" Hermano means brother."}
+      ],
+      "drills": [
+        {"prompt": "Yo ___ estudiante.", "answer": "soy", "explain": "yo → soy"},
+        {"prompt": "Tú ___ mi amigo.", "answer": "eres", "explain": "tú → eres"},
+        {"prompt": "Ella ___ mi madre.", "answer": "es", "explain": "él / ella → es"},
+        {"prompt": "Nosotros ___ hermanos.", "answer": "somos", "explain": "nosotros → somos"},
+        {"prompt": "Ellos ___ médicos.", "answer": "son", "explain": "ellos → son"},
+        {"prompt": "Translate: I am not a teacher.", "answer": "No soy profesor|No soy profesora", "explain": "No goes before the verb, and there is no article before a profession."},
+        {"prompt": "Translate: She is my sister.", "answer": "Ella es mi hermana|Es mi hermana", "explain": "Hermana is the feminine form of hermano. The pronoun can be dropped."}
+      ],
+      "books": [
+        {"title": "Short Stories in Spanish for Beginners", "author": "Olly Richards", "note": "Graded stories with glossaries. A bit early for now; worth coming back to after a few units."}
+      ]
+    },
+    {"id": 2, "stage": "A1 Beginner", "title": "Gender, plurals and articles", "theme": "Colors and animals", "ready": false},
+    {"id": 3, "stage": "A1 Beginner", "title": "Tener and estar", "theme": "Body and clothing", "ready": false},
+    {"id": 4, "stage": "A1 Beginner", "title": "Present tense of regular verbs", "theme": "Everyday verbs", "ready": false},
+    {"id": 5, "stage": "A1 Beginner", "title": "Gustar and likes", "theme": "Food and beverages", "ready": false}
+  ]
+}

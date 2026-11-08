@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#12161c"><link rel="manifest" href="manifest.json"><link rel="icon" href="icon-192.png">
+<title>Claridad</title>
+<style>
+*{box-sizing:border-box}
+:root{color-scheme:dark;--bg:#12161c;--s:#1a2027;--s2:#232b34;--ink:#e6e3dc;--mut:#97a0a8;--line:#2c353f;--acc:#7fb3ae;--good:#8db88a;--bad:#c98b8b}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+h1,h2,.serif{font-family:Georgia,'Noto Serif',serif;font-weight:400}
+h1{font-size:28px;line-height:1.25;margin:0}h2{font-size:22px;margin:0;line-height:1.35}
+#shell{display:flex;flex-direction:column;height:100dvh}
+main{flex:1;min-height:0;overflow:auto}
+nav{display:flex;background:var(--s);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav a{flex:1;text-align:center;padding:14px 4px;color:var(--mut);font-size:15px}
+nav a.on{color:var(--ink);background:var(--s2)}
+.pg{max-width:760px;margin:0 auto;padding:24px;display:flex;flex-direction:column;gap:16px}
+p{margin:0}.sm{color:var(--mut);font-size:14px;line-height:1.45}.pre{white-space:pre-line}
+.pane{background:var(--s);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.pane.hi{background:var(--s2)}
+button{font:inherit;font-size:16px;background:var(--acc);color:#0e1b1a;border:0;border-radius:10px;padding:11px 20px;align-self:flex-start}
+button.o{background:none;color:var(--ink);border:1px solid var(--line)}
+button.q{background:none;color:var(--acc);padding:6px 10px;flex:none}
+.row{display:flex;align-items:center;gap:12px}.grow{flex:1}
+hr{border:0;border-top:1px solid var(--line);width:100%;margin:0}
+.li{display:flex;gap:12px;padding:10px 0;font-size:18px}.ck{width:22px;color:var(--mut)}
+.opt{border:1px solid var(--line);background:var(--s);border-radius:10px;padding:16px;font-size:18px}
+.opt.ok{border-color:var(--good);background:#8db88a26}.opt.no{border-color:var(--bad);background:#c98b8b26}.opt.dim{color:var(--mut)}
+input{font:20px Georgia,serif;color:var(--ink);background:var(--s);border:1px solid var(--line);border-radius:10px;padding:12px;width:100%}
+.lesson{display:flex;flex-direction:column;height:100dvh}
+header{display:flex;align-items:center;gap:8px;padding:6px 12px;border-bottom:1px solid var(--line);font:18px Georgia,serif}
+.body{display:flex;flex-direction:column;flex:1;min-height:0}
+.steps{display:flex;gap:8px;overflow-x:auto;padding:8px;flex:none}
+.st{padding:8px 14px;border-radius:8px;color:var(--mut);white-space:nowrap}.st.on{background:var(--s2);color:var(--ink)}
+.cont{flex:1;overflow:auto}
+#gl{position:sticky;bottom:0;background:var(--s);border-top:1px solid var(--line);padding:14px 24px;display:flex;gap:12px;align-items:center}
+#gl[hidden]{display:none}
+.w{font:23px/1.7 Georgia,serif}.w.sel{background:var(--s2)}
+.ex{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.big{font-size:30px}.acc{color:var(--acc)}
+@media(min-width:720px){#shell{flex-direction:row}nav{order:-1;flex-direction:column;width:130px;border:0;border-right:1px solid var(--line);padding-top:24px}.body{flex-direction:row}.steps{flex-direction:column;width:220px;padding:16px;border-right:1px solid var(--line);overflow:visible}}
+</style></head>
+<body><div id="app"></div>
+<script>
+const $=s=>document.querySelector(s),STEPS=['Grammar','Vocabulary','Reading','Questions','Drills'];
+const S={tab:0,view:null,data:[],ui:{},done:JSON.parse(localStorage.done||'[]'),cards:JSON.parse(localStorage.cards||'[]')};
+const save=()=>{localStorage.done=JSON.stringify(S.done);localStorage.cards=JSON.stringify(S.cards)};
+const norm=s=>s.trim().toLowerCase().normalize('NFD').replace(/\p{M}+/gu,'').replace(/[¿?¡!.,;:]/g,'').replace(/\s+/g,' ');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const say=t=>{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='es-MX';speechSynthesis.speak(u)};
+const day=()=>Math.floor(Date.now()/864e5),L=id=>S.data.find(l=>l.id==id);
+const isDone=(l,s)=>S.done.includes(l.id+':'+s),lessonDone=l=>STEPS.every(s=>isDone(l,s));
+const nextStep=l=>STEPS.find(s=>!isDone(l,s)),current=()=>S.data.find(l=>l.ready&&!lessonDone(l));
+const due=()=>S.cards.filter(c=>c.due<=day()),newUi=()=>({i:0,p:null,s:0,v:'',res:null});
+document.addEventListener('click',e=>{const t=e.target.closest('[data-say]');if(t)say(t.dataset.say)});
+onpopstate=()=>{S.view=null;render()};
+
+function complete(l,s){const k=l.id+':'+s;if(!S.done.includes(k))S.done.push(k);
+ if(s=='Vocabulary')l.vocab.forEach(w=>{if(!S.cards.some(c=>c.es==w.es))S.cards.push({es:w.es,en:w.en,ex:w.ex,exEn:w.exEn,reps:0,interval:0,ease:2.5,due:day()})});save()}
+function grade(c,g){const t=day();
+ if(g==0){c.reps=0;c.interval=0;c.ease=Math.max(1.3,c.ease-.2);c.due=t}
+ else if(g==1){c.interval=c.reps==0?1:c.reps==1?3:Math.round(c.interval*c.ease);c.reps++;c.due=t+c.interval}
+ else{c.interval=Math.max(4,Math.round(Math.max(c.interval,1)*c.ease*1.5));c.ease+=.15;c.reps++;c.due=t+c.interval}save()}
+
+const today=()=>{const c=current(),d=due().length;return `<div class=pg><p class=sm>Today</p>${c?`<div class="pane hi"><p class=sm>Unit ${c.id}: ${esc(c.title)}</p><h1>Continue with ${nextStep(c).toLowerCase()}</h1><button onclick="openL(${c.id},'${nextStep(c)}')">Continue</button></div>`:'<h1>You are up to date</h1><p>The next units have not been written yet.</p>'}<div class=row><span class=grow>${d?d+' cards due for review':'No cards due for review'}</span>${d?'<button class=o onclick="openR()">Review</button>':''}</div>${c?`<hr><p class=sm>This unit</p>${STEPS.map(s=>`<div class=li onclick="openL(${c.id},'${s}')"><span class=ck>${isDone(c,s)?'✓':'○'}</span>${s}</div>`).join('')}`:''}</div>`};
+const course=()=>{const g={},c=current();S.data.forEach(l=>(g[l.stage]=g[l.stage]||[]).push(l));
+ return `<div class=pg><h1>Course</h1>${Object.entries(g).map(([st,ls])=>`<p class=sm>${esc(st)}</p>${ls.map(l=>{const d=lessonDone(l);return `<div class=pane style="${l==c?'background:var(--s2);border-color:var(--acc);':''}${l.ready?'':'opacity:.45;'}" ${l.ready?`onclick="openL(${l.id},'${nextStep(l)||'Grammar'}')"`:''}><div class=row><span style="width:28px;color:${d?'var(--good)':'var(--acc)'}">${d?'✓':l.id}</span><div><h2 style="font-size:18px">${esc(l.title)}</h2>${d?'':`<p class=sm>${esc(l.theme)}${l.ready?'':' (not written yet)'}</p>`}</div></div></div>`}).join('')}`).join('')}</div>`};
+const refRes=q=>{q=norm(q);const R=S.data.filter(l=>l.ready);
+ return R.filter(l=>!q||norm(l.grammar.title+' '+l.grammar.body).includes(q)).map(l=>`<div class=pane><p class=sm>Unit ${l.id}</p><h2>${esc(l.grammar.title)}</h2><p class=pre>${esc(l.grammar.body)}</p></div>`).join('')+(q?R.flatMap(l=>l.vocab).filter(w=>norm(w.es).includes(q)||norm(w.en).includes(q)).map(w=>`<div class=row><b class="serif grow">${esc(w.es)}</b><span class=sm>${esc(w.en)}</span></div>`).join(''):'')};
+const refer=()=>`<div class=pg><h1>Reference</h1><input placeholder="Search grammar and words" oninput="$('#rr').innerHTML=refRes(this.value)" autocomplete=off><div id=rr style="display:flex;flex-direction:column;gap:16px">${refRes('')}</div></div>`;
+
+const gram=l=>`<h1>${esc(l.grammar.title)}</h1><p class=pre>${esc(l.grammar.body)}</p><hr><p class=sm>Examples</p>${l.grammar.examples.map(e=>`<div class=ex><div><div class=serif style="font-size:20px">${esc(e.es)}</div><p class=sm>${esc(e.en)}</p></div><button class=q data-say="${esc(e.es)}">Listen</button></div>`).join('')}<button onclick="adv()">Continue to vocabulary</button>`;
+const vocab=l=>`<h1>Vocabulary</h1><p class=sm>${l.vocab.length} words. Continuing adds them to your review cards.</p>${l.vocab.map(w=>`<div class=ex><div><span class=serif style="font-size:20px">${esc(w.es)}</span> <span class=sm>${esc(w.en)}</span><p class=sm>${esc(w.ex)} ${esc(w.exEn)}</p></div><button class=q data-say="${esc(w.es)}">Listen</button></div><hr>`).join('')}<button onclick="adv()">Add to review and continue</button>`;
+const read=l=>{window.G=Object.fromEntries(Object.entries(l.reading.gloss).map(([k,v])=>[norm(k),v]));
+ return `<h1>${esc(l.reading.title)}</h1><p class=sm>Tap a word to see its meaning.</p>${l.reading.paragraphs.map(p=>`<div>${p.split(' ').map(w=>`<span class=w onclick="wd(this)">${esc(w)} </span>`).join('')}</div><button class=q data-say="${esc(p)}">Listen to paragraph</button>`).join('')}<button onclick="adv()">Continue to questions</button>`};
+function wd(el){const cl=x=>x.textContent.trim().replace(/[¿?¡!.,;:]/g,''),w=cl(el);
+ document.querySelectorAll('.w').forEach(x=>x.classList.toggle('sel',cl(x)==w));
+ const g=$('#gl');g.innerHTML=`<b class=serif style="font-size:22px;color:var(--acc)">${esc(w)}</b><span class=grow>${esc(G[norm(w)]||'no translation added')}</span><button class=q data-say="${esc(w)}">Listen</button>`;g.hidden=false}
+const quiz=l=>{const u=S.ui,qs=l.questions;if(u.i>=qs.length)return `<h1>${u.s} of ${qs.length} correct</h1><button onclick="adv()">Continue to drills</button>`;
+ const q=qs[u.i],p=u.p;return `<p class=sm>Question ${u.i+1} of ${qs.length}</p><h2>${esc(q.q)}</h2>${q.options.map((o,i)=>`<div class="opt ${p==null?'':i==q.answer?'ok':i==p?'no':'dim'}" onclick="pick(${i})">${esc(o)}</div>`).join('')}${p!=null?`<p>${esc(q.explain)}</p><button onclick="S.ui.i++;S.ui.p=null;render()">${u.i==qs.length-1?'Finish':'Next'}</button>`:''}`};
+const drill=l=>{const u=S.ui,ds=l.drills;if(u.i>=ds.length)return `<h1>${u.s} of ${ds.length} correct</h1><button onclick="adv()">Finish unit</button>`;
+ const d=ds[u.i],a=d.answer.split('|'),r=u.res;return `<p class=sm>Drill ${u.i+1} of ${ds.length}. Accents and capitals are ignored.</p><h2 style="font-size:24px">${esc(d.prompt)}</h2><input id=in value="${esc(u.v)}" ${r==null?'':'readonly'} autocomplete=off autocapitalize=off>${r==null?'<button onclick="chk()">Check</button>':`<p style="color:var(--${r?'good':'bad'})">${r?'Correct':'Answer: '+esc(a[0])}</p><p>${esc(d.explain)}</p><button onclick="S.ui.i++;S.ui.v='';S.ui.res=null;render()">${u.i==ds.length-1?'Finish':'Next'}</button>`}`};
+const fin=l=>`<h1>Unit ${l.id} complete</h1><p>Its ${l.vocab.length} words are in your review cards.</p>${l.books?.length?`<hr><p class=sm>Keep reading (optional)</p>${l.books.map(b=>`<div class=pane><h2 style="font-size:19px">${esc(b.title)}</h2><p class=sm>${esc(b.author)}</p><p class=sm style="color:var(--ink)">${esc(b.note)}</p></div>`).join('')}`:''}<button onclick="history.back()">Back to today</button>`;
+const hdr=t=>`<header><button class=q onclick="history.back()">Back</button><span>${t}</span></header>`;
+const lessonView=()=>{const v=S.view,l=L(v.id),cur=v.fin?'':v.step,b=v.fin?fin(l):{Grammar:gram,Vocabulary:vocab,Reading:read,Questions:quiz,Drills:drill}[v.step](l);
+ return `<div class=lesson>${hdr(`Unit ${l.id}: ${esc(l.title)}`)}<div class=body><div class=steps>${STEPS.map(s=>`<div class="st ${s==cur?'on':''}" onclick="stp('${s}')">${isDone(l,s)?'✓ ':''}${s}</div>`).join('')}</div><div class=cont><div class=pg>${b}</div>${cur=='Reading'?'<div id=gl hidden></div>':''}</div></div></div>`};
+const review=()=>{const v=S.view,c=S.cards.find(x=>x.es==v.q[0]);
+ return `<div class=lesson>${hdr('Review')}<div class=cont><div class=pg>${!c?`<h1>${v.total?'Review complete':'Nothing due'}</h1><p>${v.total?v.total+' cards reviewed.':'Come back tomorrow.'}</p><button onclick="history.back()">Back to today</button>`:`<p class=sm>${v.n+1} of ${v.total}</p><h1 class=big>${esc(c.en)}</h1>${v.rev?`<h1 class="big acc">${esc(c.es)}</h1><p>${esc(c.ex)}</p><p class=sm>${esc(c.exEn)}</p><button class=q data-say="${esc(c.es)}">Listen again</button><div class=row>${['Again','Good','Easy'].map((b,g)=>`<button class=o onclick="gr(${g})">${b}</button>`).join('')}</div>`:'<button onclick="show()">Show answer</button>'}`}</div></div></div>`};
+
+function render(){const v=S.view;$('#app').innerHTML=v?(v.t=='rev'?review():lessonView()):`<div id=shell><main>${[today,course,refer][S.tab]()}</main><nav>${['Today','Course','Reference'].map((n,i)=>`<a class="${i==S.tab?'on':''}" onclick="S.tab=${i};render()">${n}</a>`).join('')}</nav></div>`}
+function go(v){S.view=v;S.ui=newUi();history.pushState({},'');render()}
+const openL=(id,step)=>go({t:'les',id,step,fin:false}),openR=()=>{const q=due().map(c=>c.es);go({t:'rev',q,total:q.length,n:0,rev:false})};
+function stp(s){S.view.fin=false;S.view.step=s;S.ui=newUi();render()}
+function adv(){const v=S.view,l=L(v.id);complete(l,v.step);const n=STEPS[STEPS.indexOf(v.step)+1];if(n)v.step=n;else v.fin=true;S.ui=newUi();render();$('.cont').scrollTo(0,0)}
+function pick(i){const u=S.ui,q=L(S.view.id).questions[u.i];if(u.p!=null)return;u.p=i;if(i==q.answer)u.s++;render()}
+function chk(){const u=S.ui,v=$('#in').value;if(!v.trim())return;u.v=v;u.res=L(S.view.id).drills[u.i].answer.split('|').some(a=>norm(a)==norm(v));if(u.res)u.s++;render()}
+function show(){S.view.rev=true;render();say(S.cards.find(x=>x.es==S.view.q[0]).es)}
+function gr(g){const v=S.view,c=S.cards.find(x=>x.es==v.q[0]);grade(c,g);if(g==0)v.q=v.q.slice(1).concat(c.es);else{v.q=v.q.slice(1);v.n++}v.rev=false;render()}
+
+fetch('units.json').then(r=>r.json()).then(d=>{S.data=d.units;render()});
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');
+</script></body></html>
